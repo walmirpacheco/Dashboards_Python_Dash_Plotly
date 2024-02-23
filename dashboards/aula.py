@@ -7,7 +7,11 @@ app = Dash(__name__)
 # assume you have a "long-form" data frame
 # see https://plotly.com/python/px-arguments/ for more options
 df = pd.read_excel("dashboards/vendas.xlsx")
+opcoes = list(df['ID Loja'].unique())
+opcoes.append("Todas as Lojas")
 
+
+# Criando gráfico
 fig = px.bar(df, x="Produto", y="Quantidade", color="ID Loja", barmode="group")
 
 app.layout = html.Div(children=[
@@ -16,9 +20,10 @@ app.layout = html.Div(children=[
     html.Div(children='''
         Obs: Esse gráfico mostra a quantidade de produtos dendidos, não o faturamento.
     '''),
+    dcc.Dropdown(opcoes, value='Todas as Lojas', id='lista_lojas'),
 
     dcc.Graph(
-        id='example-graph',
+        id='grafico_quantidades_vendas',
         figure=fig
     )
 ])
